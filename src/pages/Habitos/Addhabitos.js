@@ -9,18 +9,25 @@ export default function Addhabito() {
   const [habito, setHabito] = useState("");
   const [days, setDays] = useState([]);
   const { user } = useContext(AuthContext);
-  const [backbutton, setBackbutton] = useState(`unselected`)  
-  //console.log (user.u.token)
-  // useEffect(()=> {
-  //   for(let i=0; i<7; i++){
-  //     if(i === days[i]){
-  //       setBackbutton("selected")
-  //     }else{
-  //       setBackbutton("unselected")
-  //     }
-  //   }
+  const [backbutton, setBackbutton] = useState(`unselected`)
+  const [back, setBack]= useState({});  
+  const newBack =[]
+
+ 
+
+  // console.log (user.u.token)
+  useEffect(()=> {
+    for (let i=0; i<7; i++){
+      newBack.push({
+        color: `${BackButton.unselected.color}`,
+        background: `${BackButton.unselected.back}`,
+        border: `1px solid ${BackButton.unselected.border}`
+      })
+    }
+    setBack(newBack)
+    console.log(newBack)
     
-  // },[days])
+  },[])
 
   function adicionar(){
     setAddhabito("")
@@ -31,21 +38,15 @@ export default function Addhabito() {
 
 
   function dia(e, day) {
-    console.log(days);
-    console.log(e.target);
-    if (days.includes(day)) {
-      const newdays = days.filter((d) => d !== day);
-      setDays(newdays);
-    }else{
-    setDays([...days, day])
-    }
+   if (back[day].color === "#FFFFFF"){
+    back[day] = {
+      color: `${BackButton.selected.color}`,
+      background: `${BackButton.selected.back}`,
+      border: `1px solid ${BackButton.selected.border}`
+    } 
+   }
+   
   }
-
- 
-
-
-
-
 
   function Salvar(e) {
     e.preventDefault();
@@ -53,11 +54,11 @@ export default function Addhabito() {
       "https://mock-api.bootcamp.respondeai.com.br/api/v2/trackit/habits";
     const body = {
       name:  `${habito}`,
-      days: {days}
+      days: days
     };
 
     const promise = axios.post(URL, body, {
-      header: {
+      headers: {
         'Authorization': `Bearer ${user.u.token}`
       },
     })
@@ -103,13 +104,13 @@ export default function Addhabito() {
               <div>
                 <ul>
                 {/* {days.map(seat => (<li onClick={(d, index) => dia(index)}>D</li> ))} */}
-                  <li onClick={(e) => dia(e, 0)}>D</li>
-                  <li onClick={(e) => dia(e, 1)}>S</li>
-                  <li onClick={(e) => dia(e, 2)}>T</li>
-                  <li onClick={(e) => dia(e, 3)}>Q</li>
-                  <li onClick={(e) => dia(e, 4)}>Q</li>
-                  <li onClick={(e) => dia(e, 5)}>S</li>
-                  <li onClick={(e) => dia(e, 6)}>S</li>
+                  <li style={back[0]} onClick={(e) => dia(e, 0)}>D</li>
+                  <li style={back[1]} onClick={(e) => dia(e, 1)}>S</li>
+                  <li style={back[2]} onClick={(e) => dia(e, 2)}>T</li>
+                  <li style={back[3]} onClick={(e) => dia(e, 3)}>Q</li>
+                  <li style={back[4]} onClick={(e) => dia(e, 4)}>Q</li>
+                  <li style={back[5]} onClick={(e) => dia(e, 5)}>S</li>
+                  <li style={back[6]} onClick={(e) => dia(e, 6)}>S</li>
                 </ul>
               </div>
               <div className="salvar">
@@ -187,9 +188,9 @@ const Habitos = styled.div`
       font-size: 20px;
       line-height: 25px;
       text-align: center;
-      color: ${props => BackButton[props.backbutton].color};;
-      background: ${props => BackButton[props.backbutton].back};;
-      border: 1px solid ${props => BackButton[props.backbutton].border};;
+      color: ${props => BackButton[props.backbutton].color};
+      background: ${props => BackButton[props.backbutton].back};
+      border: 1px solid ${props => BackButton[props.backbutton].border};
       /* color: #ffffff;
       background: #cfcfcf;
       border: 1px solid #cfcfcf; */

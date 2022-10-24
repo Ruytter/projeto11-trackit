@@ -2,32 +2,39 @@ import Header from "../../components/Header";
 import Rodape from "../../components/Footer"
 import Addhabito from "./Addhabitos";
 import Listadehabitos from "./Listadehabitos";
-import { useEffect, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import axios from "axios";
-import { hasFormSubmit } from "@testing-library/user-event/dist/utils";
+import { AuthContext } from "../../contexts/auth";
+// import { hasFormSubmit } from "@testing-library/user-event/dist/utils";
 export default function Habitos(props) {
+  const { user } = useContext(AuthContext);
   const { setBackpages } = props;
-  setBackpages("secondcolor")
-  const [listahabitos, setListahabitos] = useState("");
+  const [listahabitos, setListahabitos] = useState([])
+
   useEffect(() => {
-    const URL = "https://mock-api.bootcamp.respondeai.com.br/api/v2/trackit/habits";
-    const promisse = axios.get(URL);
+    setBackpages("secondcolor")
+    const URL = `https://mock-api.bootcamp.respondeai.com.br/api/v2/trackit/habits`;
+    const promisse = axios.get(URL, {
+      headers: {
+        'Authorization': `Bearer ${user.u.token}`
+      }
+    });
 
     promisse.then((res) => {
-      alert("deu certo")
-      setListahabitos(res.data);
+      const habitos= [...res.data];
+      setListahabitos(habitos)
     });
 
     promisse.catch((err) => {
-      // console.log(err.response.data);
+      console.log(err.response.data);
     });
-  }, []);
-
+  }, [user, setBackpages]);
+  // console.log(listahabitos);
   return (
     <>
       <Header />
       <Addhabito />
-      {listahabitos? listahabitos.map((h) => (<Listadehabitos key={h.id}/>)): <Listadehabitos/>}
+      {listahabitos? listahabitos.map((h) => (<Listadehabitos key={h.id} listahabitos = {listahabitos}/>)): <Listadehabitos/>}
       <Rodape />
     </>
   );

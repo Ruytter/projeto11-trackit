@@ -1,9 +1,12 @@
 import Header from "../../components/Header";
 import Rodape from "../../components/Footer";
 import styled from "styled-components";
+import { useEffect } from "react";
 export default function Historico(props) {
   const { setBackpages } = props;
-  setBackpages("secondcolor");
+  useEffect(() => {
+    setBackpages("secondcolor")
+  }, []);
   return (
     <>
       <Header />
