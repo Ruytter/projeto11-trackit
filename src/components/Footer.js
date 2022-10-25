@@ -14,12 +14,14 @@ export default function Footer() {
   );
 }
 const Rodape = styled.div`
+  width: 414px;
   height: 70px;
-  background: rebeccapurple;
-  /* background: #ffffff; */
+  background: #ffffff;
   position: relative;
   display: flex;
   justify-content: space-around;
+  position: fixed;
+  bottom: 0px;
   p {
     font-weight: 400;
     font-size: 18px;

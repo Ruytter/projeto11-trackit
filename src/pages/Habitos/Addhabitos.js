@@ -9,14 +9,10 @@ export default function Addhabito() {
   const [habito, setHabito] = useState("");
   const [days, setDays] = useState([]);
   const { user } = useContext(AuthContext);
-  const [backbutton, setBackbutton] = useState(`unselected`)
   const [back, setBack]= useState({});  
-  const newBack =[]
 
- 
-
-  // console.log (user.u.token)
   useEffect(()=> {
+    const newBack =[]
     for (let i=0; i<7; i++){
       newBack.push({
         color: `${BackButton.unselected.color}`,
@@ -25,8 +21,6 @@ export default function Addhabito() {
       })
     }
     setBack(newBack)
-    console.log(newBack)
-    
   },[])
 
   function adicionar(){
@@ -37,15 +31,26 @@ export default function Addhabito() {
   }
 
 
-  function dia(e, day) {
-   if (back[day].color === "#FFFFFF"){
-    back[day] = {
+  function dia(day) {
+    const newBack = [...back]
+   if (newBack[day].background === "#FFFFFF"){
+    newBack[day] = {
       color: `${BackButton.selected.color}`,
       background: `${BackButton.selected.back}`,
       border: `1px solid ${BackButton.selected.border}`
-    } 
+    }
+    setBack(newBack)
+    setDays([...days, day])
+   }else{
+    newBack[day] = {
+      color: `${BackButton.unselected.color}`,
+      background: `${BackButton.unselected.back}`,
+      border: `1px solid ${BackButton.unselected.border}`
+    }
+    const newdays = days.filter((d) => d !== day);
+    setBack(newBack)
+    setDays(newdays)
    }
-   
   }
 
   function Salvar(e) {
@@ -62,33 +67,22 @@ export default function Addhabito() {
         'Authorization': `Bearer ${user.u.token}`
       },
     })
-
-    // const promise = axios.post(URL, body);
     promise.then((habitos) => {
       alert("aqui deu certo")
        console.log(habitos.data)
-      //   {
-      //     id: 3,
-      //     name: "Joe",
-      //     image: "https://http.cat/411.jpg",
-      //     email: "joe@respondeai.com.br",
-      //     password: "123456",
-      //     token: "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MywiaWF0IjoxNjIxMjg0NzExfQ.b8e3bYm7TnU5p6pfrCPPbzboax6gvh_gGNFR4T51FxY"
-      // }
     });
     promise.catch((err) => {
       alert("tá dando errado")
      console.log(err.response.data);
     });
   }
-  // console.log(user.token);
   return (
     <>
       <Add>
         <p>Meus hábitos</p>
         <button onClick={adicionar}>+</button>
       </Add>
-      <Habitos className={addhabito} backbutton= {backbutton}>
+      <Habitos className={addhabito} >
         <form onSubmit={Salvar}> 
           <div>
             <div>
@@ -104,13 +98,13 @@ export default function Addhabito() {
               <div>
                 <ul>
                 {/* {days.map(seat => (<li onClick={(d, index) => dia(index)}>D</li> ))} */}
-                  <li style={back[0]} onClick={(e) => dia(e, 0)}>D</li>
-                  <li style={back[1]} onClick={(e) => dia(e, 1)}>S</li>
-                  <li style={back[2]} onClick={(e) => dia(e, 2)}>T</li>
-                  <li style={back[3]} onClick={(e) => dia(e, 3)}>Q</li>
-                  <li style={back[4]} onClick={(e) => dia(e, 4)}>Q</li>
-                  <li style={back[5]} onClick={(e) => dia(e, 5)}>S</li>
-                  <li style={back[6]} onClick={(e) => dia(e, 6)}>S</li>
+                  <li style={back[0]} onClick={() => dia(0)}>D</li>
+                  <li style={back[1]} onClick={() => dia(1)}>S</li>
+                  <li style={back[2]} onClick={() => dia(2)}>T</li>
+                  <li style={back[3]} onClick={() => dia(3)}>Q</li>
+                  <li style={back[4]} onClick={() => dia(4)}>Q</li>
+                  <li style={back[5]} onClick={() => dia(5)}>S</li>
+                  <li style={back[6]} onClick={() => dia(6)}>S</li>
                 </ul>
               </div>
               <div className="salvar">
@@ -157,9 +151,14 @@ const Habitos = styled.div`
   border-radius: 5px;
   background-color: #ffffff;
   padding: 20px 0 5px;
+  form{
+    width: 310px;
+    margin: 0 auto;
+  }
   > div {
+    width: 310px;
+    margin: 0px auto;
     padding: 20px 0 5px;
-
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -188,12 +187,6 @@ const Habitos = styled.div`
       font-size: 20px;
       line-height: 25px;
       text-align: center;
-      color: ${props => BackButton[props.backbutton].color};
-      background: ${props => BackButton[props.backbutton].back};
-      border: 1px solid ${props => BackButton[props.backbutton].border};
-      /* color: #ffffff;
-      background: #cfcfcf;
-      border: 1px solid #cfcfcf; */
       border-radius: 5px;
     }
   }

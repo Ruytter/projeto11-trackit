@@ -30,8 +30,6 @@ function App() {
 export default App;
 const Container = styled.div`
 width: 414px;
-margin: 0 auto;
+margin: 75px auto;
 background-color:  ${props => BackPage[props.backpages].back};
-/* background: #FFFFFF; */
-/* background: #E5E5E5; */
 `

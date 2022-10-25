@@ -7,7 +7,7 @@ import styled from "styled-components";
 export default function Li(props) {
   const { day, isSelected  } = props;
   const [status, setStatus] = useState("selected")
-  console.log(day);
+  
   useEffect(() => {
     if (isSelected){
             setStatus("selected")

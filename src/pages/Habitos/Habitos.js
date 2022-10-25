@@ -5,7 +5,6 @@ import Listadehabitos from "./Listadehabitos";
 import { useContext, useEffect, useState } from "react";
 import axios from "axios";
 import { AuthContext } from "../../contexts/auth";
-// import { hasFormSubmit } from "@testing-library/user-event/dist/utils";
 export default function Habitos(props) {
   const { user } = useContext(AuthContext);
   const { setBackpages } = props;
@@ -29,12 +28,11 @@ export default function Habitos(props) {
       console.log(err.response.data);
     });
   }, [user, setBackpages]);
-  // console.log(listahabitos);
   return (
     <>
       <Header />
       <Addhabito />
-      {listahabitos? listahabitos.map((h) => (<Listadehabitos key={h.id} listahabitos = {listahabitos}/>)): <Listadehabitos/>}
+      {listahabitos? listahabitos.map((h, index) => (<Listadehabitos key={h.id} listahabitos = {listahabitos[index]}/>)): <Listadehabitos listahabitos = {listahabitos}/>}
       <Rodape />
     </>
   );
